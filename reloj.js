@@ -322,21 +322,21 @@ function deshabilitarCrono (){
 let divMin=document.createElement("input")
 
 //divMin.setAttribute("contenteditable","true")
-divMin.setAttribute("class","indicador")
+divMin.setAttribute("class","indicador input")
 divMin.setAttribute("id","divMin")
 divMin.innerText= "0"+min
 enDisplay.appendChild(divMin)
 
 let divSeg =document.createElement("input")
 
-divSeg.setAttribute("class","indicador")
+divSeg.setAttribute("class","input")
 divSeg.setAttribute("id","divSeg")
 divSeg.innerText= ":"+seg
 enDisplay.appendChild(divSeg)
 
-let divMili =document.createElement("div")
+let divMili =document.createElement("input")
 divMili.setAttribute("contenteditable","true") 
-divMili.setAttribute("class","indicador")
+divMili.setAttribute("class","input")
 divMili.setAttribute("id","divMil")
 divMili.innerText= ":"+mili
 enDisplay.appendChild(divMili)
@@ -362,7 +362,7 @@ divSeg.addEventListener("change",(evento)=>{
 
 divSeg.setAttribute("value",`:${seg}`)
 divMin.setAttribute("value",`${min}`)
-
+divMili.setAttribute("value",`:${mili}`)
 
 
  
@@ -381,7 +381,8 @@ divMin.setAttribute("value",`${min}`)
         }
         /* divMin.innerText= "0"+min
         divSeg.innerText= ":"+seg*/
-        divMili.innerText= ":"+mili 
+        //divMili.innerText= ":"+mili
+        divMili.setAttribute("value",`:${mili}`) 
         //divMin.innerHTML=`<input value="" class="indicador" id="divMin">${min}</input>`
         divMin.setAttribute("value",`${min}`)
         divSeg.setAttribute("value",`:${seg}`)

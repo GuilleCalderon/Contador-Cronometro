@@ -55,12 +55,22 @@ body {
     flex-direction: row;
     width: 100%; 
     font-size: 32px;
+   
+
+}
+.input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; 
+    font-size: 32px;
     background: none;
     border: none;
     font-weight: bold;
     padding: 0;
     margin: 0%;
-
+    text-align: right;
+    
 }
 
 
