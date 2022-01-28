@@ -7,6 +7,8 @@ const restarEnDisplay = document.getElementById("minusBtn")
 const cronometro = document.getElementById("cronometro")
 const listaTiempo = document.getElementById("lista-tiempos")
 const temporizadorBtn = document.getElementById("temporizador")
+let checkContador = document.getElementById("checkContador")
+let checkCronometro = document.getElementById("checkCronometro")
 let estadoInicial = 0
 let sucesoActivo = false
 let forReset
@@ -16,6 +18,11 @@ let vueltas = []
 let contadorCronometro = 0
 let contadorTemporizador = 0
 let btnCerrar
+let intermitencia
+let cronometroFuncionando
+let mili=0
+let seg=0    
+let min=0
 //Eventos
 
 sumarEnDisplay.addEventListener("click",()=>{
@@ -65,13 +72,10 @@ resetDisplay.addEventListener("click",()=>{
     contadorTemporizador=0
     deshabilitarCrono()
     deshabilitarTempo()
-    cronometro.classList.toggle("btn-desactivado")
-    temporizadorBtn.classList.toggle("btn-desactivado")
-
-   
-   
-
-
+    if (estadoInicial === 0){
+        cronometro.classList.remove("btn-desactivado")
+        temporizadorBtn.classList.remove("btn-desactivado")
+    }
 })
 
 cronometro.addEventListener("click",()=>{
@@ -90,7 +94,15 @@ cronometro.addEventListener("click",()=>{
 
         }
         cronometro.value= "Detener Cronometro"
-        forReset = setInterval(cronometroIniciar,1000)
+        console.log(checkCronometro.checked)
+        if(checkCronometro.checked){
+            
+            cronometroFuncionando = setInterval(cambiarDisplayACronometro,10)
+        }
+        if(checkContador.checked){
+            
+            forReset = setInterval(cronometroIniciar,1000)
+        }
         let marcarVueltaBtn=document.getElementById("input-btn")
         
         marcarVueltaBtn.innerHTML=
@@ -117,42 +129,73 @@ cronometro.addEventListener("click",()=>{
                 
                 if(i===vueltas.length-1){
                     
-                    listaTiempo.innerHTML+=`
-                    <div class="div-lista">
-                    <li id="tiempo_${i}"><div contenteditable=true>Su tiempo es: ${vuelta} segundos // La diferencia entre tiempos es: ${diferencia} segundos</div></li><input type="button" class="btn-todos" id="cerrar_${i}" value="x">
-                    </div>`
+                   const listElement = document.createElement("li")
+                   listElement.setAttribute("id",`tiempo_${i}`)
+                   listElement.innerHTML = `<div contenteditable=true>Ingrese titulo de la vuelta</div>Su tiempo es: ${vuelta} segundos // La diferencia entre tiempos es: ${diferencia} segundos`
+                   const btnCerrar =document.createElement("input")
+                   btnCerrar.setAttribute("type","button")
+                   btnCerrar.setAttribute("class","btn-todos")
+                   btnCerrar.setAttribute("id",`cerrar_${i}`)
+                   btnCerrar.setAttribute("value","x")
+
+                   listElement.appendChild(btnCerrar)
+
+                   listaTiempo.appendChild(listElement)
+
+                   btnCerrar.addEventListener("click",()=>{
+                       listElement.remove()
+                   })
                 }
-                btnCerrar = document.getElementsByClassName("btn-eliminar")
                 
-              /*   btnCerrar.addEventListener("click",()=>{
-                    eliminarTiempo(i)
-                    
-                    console.log("funcionaa")
-                })   */
+                
+            
                 
             })       
             
         })
         console.log(contadorTemporizador,contadorCronometro)
     }else {
-        contadorTemporizador--
-        deshabilitarTempo()
-        if(contadorTemporizador===-1){
-            contadorTemporizador=0
+        if(checkCronometro.checked){
+            contadorTemporizador--
             deshabilitarTempo()
+            if(contadorTemporizador===-1){
+                contadorTemporizador=0
+                deshabilitarTempo()
+                
+            }
+            temporizadorBtn.classList.toggle("btn-desactivado")
+            sucesoActivo=false
+            cronometro.value= "Iniciar Cronometro"
             
+            clearInterval(cronometroFuncionando)
         }
-        temporizadorBtn.classList.toggle("btn-desactivado")
-        sucesoActivo=false
-        cronometro.value= "Iniciar Cronometro"
-        detenerCronometro()
-        console.log(contadorTemporizador,contadorCronometro)
+        if(checkContador){
+
+            contadorTemporizador--
+            deshabilitarTempo()
+            if(contadorTemporizador===-1){
+                contadorTemporizador=0
+                deshabilitarTempo()
+                
+            }
+            temporizadorBtn.classList.toggle("btn-desactivado")
+            sucesoActivo=false
+            cronometro.value= "Iniciar Cronometro"
+            detenerCronometro()
+        }
+
+        
     }
     
 })
 
 temporizadorBtn.addEventListener("click",()=>{
 
+    if (intermitencia){
+         clearInterval(intermitencia)
+         enDisplay.classList.remove("rojo")
+         
+        }
     if((sucesoActivo === false) && (estadoInicial>0)){
         
         if(contadorCronometro===1){
@@ -194,17 +237,7 @@ temporizadorBtn.addEventListener("click",()=>{
 })
 
 //Funciones
-function eliminarTiempo (i){
-    /* const tiempoIndividual = vueltas.find( tiempo => tiempo.value === vueltas[i])
-    const index = vueltas.indexOf(tiempoIndividual)
-    if(index > -1){
-        vueltas.splice(index,1)
-    } */
 
-    let padre = document.getElementById("div-lista")
-    let item =document.getElementById(`tiempo_${i}`)
-    padre.removeChild(item) 
-} 
 
 function sumarContador  () {
     return estadoInicial = estadoInicial + 1
@@ -238,24 +271,28 @@ function temporizadorIniciar () {
         estadoInicial--
     }else{
         
-        //contadorTemporizador--
-        //deshabilitarTempo()
+        
         detenerTemporizador()
         contadorCronometro--
         deshabilitarCrono()
-        setTimeout(()=>{
-            temporizadorBtn.value ="Temporizador OK"
-            
-        },500)
-        setTimeout(()=>{
-            temporizadorBtn.value ="Iniciar Temporizador"
+        
+        temporizadorBtn.value ="Temporizador OK"
+
+
+        intermitencia= setInterval(()=>{
+
+            enDisplay.classList.toggle("rojo")
+
+        },700)    
+        
+       
             contadorTemporizador=0
             contadorCronometro=0
             deshabilitarCrono()
             deshabilitarTempo()
             cronometro.classList.toggle("btn-desactivado")
             
-        },2500)
+        
 
     }
     console.log(contadorTemporizador,contadorCronometro)
@@ -282,12 +319,83 @@ function deshabilitarCrono (){
     }
 }
 
-function frenarEn0 () {
-    if (estadoInicial === 0){
-        contadorTemporizador--
-        deshabilitarTempo()
-    }
+let divMin=document.createElement("input")
+
+//divMin.setAttribute("contenteditable","true")
+divMin.setAttribute("class","indicador")
+divMin.setAttribute("id","divMin")
+divMin.innerText= "0"+min
+enDisplay.appendChild(divMin)
+
+let divSeg =document.createElement("input")
+
+divSeg.setAttribute("class","indicador")
+divSeg.setAttribute("id","divSeg")
+divSeg.innerText= ":"+seg
+enDisplay.appendChild(divSeg)
+
+let divMili =document.createElement("div")
+divMili.setAttribute("contenteditable","true") 
+divMili.setAttribute("class","indicador")
+divMili.setAttribute("id","divMil")
+divMili.innerText= ":"+mili
+enDisplay.appendChild(divMili)
+
+divMin.addEventListener("change",(evento)=>{
+    min=evento.target.value
+
+   divMin.setAttribute("value",`${min}`)
+   
+   console.log(min)
+
+})
+
+divSeg.addEventListener("change",(evento)=>{
+   
+    seg=evento.target.value
+   divSeg.setAttribute("value",`:${evento.target.value}`)
+   
+
+   console.log(seg)    
+
+})
+
+divSeg.setAttribute("value",`:${seg}`)
+divMin.setAttribute("value",`${min}`)
+
+
+
+ 
+ function cambiarDisplayACronometro() {
+     
+     
+     mili++
+     
+     if(mili >= 99){
+         mili=0
+         seg++
+        }
+        if(seg>=59){
+            seg=0
+            min++
+        }
+        /* divMin.innerText= "0"+min
+        divSeg.innerText= ":"+seg*/
+        divMili.innerText= ":"+mili 
+        //divMin.innerHTML=`<input value="" class="indicador" id="divMin">${min}</input>`
+        divMin.setAttribute("value",`${min}`)
+        divSeg.setAttribute("value",`:${seg}`)
+        //divSeg.innerHTML=`<input value="" class="indicador" id="divMin">${seg}</input>`
+        
+        
+        /* enDisplay.innerHTML = `<div class="indicador">
+        <div contenteditable=true>0${min}</div>
+        <div contenteditable=true>:${seg}</div>
+        <div contenteditable=true>:${mili}</div>
+        </div>` */
+        
+        
 }
 
 
-console.log(contadorTemporizador,contadorCronometro)
+

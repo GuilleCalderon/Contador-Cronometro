@@ -15,7 +15,15 @@
     <h1>Validacion conocimientos</h1>
     <div class="container">
         <div id="actualizarDisplay" class="display">
-            <div class="indicador">0</div>
+            <div class="indicador">
+                <!-- <div id="min" contenteditable=true>00</div>
+                <div id="seg" contenteditable=true>:00</div>
+                <div id="mili" contenteditable=true>:00</div> -->
+            </div>
+        </div>
+        <div>
+            <input type="radio" name="crono" id="checkCronometro" value="cronometro"> Cronometro
+            <input type="radio" name="crono" id="checkContador" value="contador"> Contador
         </div>
         <div>
             <button type="button" class="btn-todos" id="minusBtn">-</button>
@@ -23,8 +31,8 @@
             <button type="button" class="btn-todos" id="masBtn">+</button>
         </div>
         <div>
-            <input type="button" class="btn-todos " value="Iniciar Cronometro" id="cronometro">
-            <input type="button" class="btn-todos " value="Iniciar Temporizador" id="temporizador">
+            <input type="button" class="iniciadores" value="Iniciar Cronometro" id="cronometro">
+            <input type="button" class="iniciadores" value="Iniciar Temporizador" id="temporizador">
         </div>
         <div id="input-btn"></div>
         <ol class="lista" id="lista-tiempos">
