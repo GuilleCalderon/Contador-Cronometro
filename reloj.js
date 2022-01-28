@@ -320,72 +320,78 @@ function deshabilitarCrono (){
 }
 
 let divMin=document.createElement("input")
-
 //divMin.setAttribute("contenteditable","true")
-divMin.setAttribute("class","indicador input")
+divMin.setAttribute("class","input")
 divMin.setAttribute("id","divMin")
 divMin.innerText= "0"+min
 enDisplay.appendChild(divMin)
 
 let divSeg =document.createElement("input")
-
 divSeg.setAttribute("class","input")
 divSeg.setAttribute("id","divSeg")
-divSeg.innerText= ":"+seg
+divSeg.innerText= `:${seg}`
 enDisplay.appendChild(divSeg)
 
 let divMili =document.createElement("input")
-divMili.setAttribute("contenteditable","true") 
+//divMili.setAttribute("contenteditable","true") 
 divMili.setAttribute("class","input")
 divMili.setAttribute("id","divMil")
 divMili.innerText= ":"+mili
 enDisplay.appendChild(divMili)
-
-divMin.addEventListener("change",(evento)=>{
-    min=evento.target.value
-
-   divMin.setAttribute("value",`${min}`)
-   
-   console.log(min)
-
-})
-
-divSeg.addEventListener("change",(evento)=>{
-   
-    seg=evento.target.value
-   divSeg.setAttribute("value",`:${evento.target.value}`)
-   
-
-   console.log(seg)    
-
-})
 
 divSeg.setAttribute("value",`:${seg}`)
 divMin.setAttribute("value",`${min}`)
 divMili.setAttribute("value",`:${mili}`)
 
 
- 
- function cambiarDisplayACronometro() {
-     
-     
-     mili++
-     
-     if(mili >= 99){
-         mili=0
-         seg++
-        }
-        if(seg>=59){
-            seg=0
-            min++
-        }
-        /* divMin.innerText= "0"+min
-        divSeg.innerText= ":"+seg*/
-        //divMili.innerText= ":"+mili
-        divMili.setAttribute("value",`:${mili}`) 
-        //divMin.innerHTML=`<input value="" class="indicador" id="divMin">${min}</input>`
-        divMin.setAttribute("value",`${min}`)
-        divSeg.setAttribute("value",`:${seg}`)
+
+divMin.addEventListener("change",(evento)=>{
+    min = evento.target.value
+    
+
+   //divMin.setAttribute("value",`${min}`)
+   
+  
+
+})
+
+divSeg.addEventListener("change",(evento)=>{
+   
+    seg = evento.target.value
+   //divSeg.setAttribute("value",`:${seg}`)
+   
+
+   console.log(seg)    
+
+})
+
+function cambiarDisplayACronometro() {
+    
+    
+    mili++
+    
+    if(mili >= 99){
+        mili=0
+        seg++
+    }
+    if(seg>=59){
+        seg=0
+        min++
+    }
+    /* divMin.innerText= "0"+min
+    divSeg.innerText= ":"+seg*/
+    divSeg.innerHTML= `: ${seg}`
+    //divMili.setAttribute("value",`:${mili}`) 
+    divSeg.setAttribute("value",`:${seg}`)
+    divMin.setAttribute("value",`${min}`)
+    divMili.setAttribute("value",`:${mili}`)
+    /* enDisplay.innerHTML=`
+    <input class="input" value="${min}" id="divMin"></input>
+    <input class="input" value=":${seg}" id="divSeg"></input>
+    <input class="input" value=":${mili}" id="divMil"></input>` */
+    
+        //divMin.setAttribute("value",`${min}`)
+        //divSeg.setAttribute("value",`:${seg}`)
         //divSeg.innerHTML=`<input value="" class="indicador" id="divMin">${seg}</input>`
         
         
