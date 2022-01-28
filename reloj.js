@@ -82,19 +82,6 @@ cronometro.addEventListener("click",()=>{
    
     if((sucesoActivo === false) && (estadoInicial>=0)) {
         sucesoActivo = true
-        if(contadorTemporizador===1){
-            contadorTemporizador--
-            deshabilitarTempo()
-            temporizadorBtn.classList.toggle("btn-desactivado")
-        }
-        if(contadorTemporizador===0){
-            contadorTemporizador++
-            deshabilitarTempo()
-            temporizadorBtn.classList.toggle("btn-desactivado")
-
-        }
-        cronometro.value= "Detener Cronometro"
-        console.log(checkCronometro.checked)
         if(checkCronometro.checked){
             
             cronometroFuncionando = setInterval(cambiarDisplayACronometro,10)
@@ -103,6 +90,21 @@ cronometro.addEventListener("click",()=>{
             
             forReset = setInterval(cronometroIniciar,1000)
         }
+        if(contadorTemporizador===1){
+            contadorTemporizador=0
+            deshabilitarTempo()
+            temporizadorBtn.classList.remove("btn-desactivado")
+            console.log(contadorTemporizador,contadorCronometro)
+        }
+        if(contadorTemporizador===0){
+            contadorTemporizador++
+            deshabilitarTempo()
+            temporizadorBtn.classList.add("btn-desactivado")
+            console.log(contadorTemporizador,contadorCronometro)
+
+        }
+        cronometro.value= "Detener Cronometro"
+        console.log(checkCronometro.checked)
         let marcarVueltaBtn=document.getElementById("input-btn")
         
         marcarVueltaBtn.innerHTML=
@@ -169,7 +171,7 @@ cronometro.addEventListener("click",()=>{
             
             clearInterval(cronometroFuncionando)
         }
-        if(checkContador){
+        if(checkContador.checked){
 
             contadorTemporizador--
             deshabilitarTempo()
@@ -326,22 +328,33 @@ divMin.setAttribute("id","divMin")
 divMin.innerText= "0"+min
 enDisplay.appendChild(divMin)
 
+let divPuntito = document.createElement("div")
+divPuntito.innerText=":"
+divPuntito.setAttribute("class","indicador")
+enDisplay.appendChild(divPuntito)
+
 let divSeg =document.createElement("input")
 divSeg.setAttribute("class","input")
 divSeg.setAttribute("id","divSeg")
-divSeg.innerText= `:${seg}`
+
 enDisplay.appendChild(divSeg)
+
+let divPuntito2 = document.createElement("div")
+divPuntito2.innerText=":"
+divPuntito2.setAttribute("class","indicador")
+enDisplay.appendChild(divPuntito2)
+
 
 let divMili =document.createElement("input")
 //divMili.setAttribute("contenteditable","true") 
-divMili.setAttribute("class","input")
+divMili.setAttribute("class","input inputMili")
 divMili.setAttribute("id","divMil")
-divMili.innerText= ":"+mili
+divMili.innerText= mili
 enDisplay.appendChild(divMili)
 
-divSeg.setAttribute("value",`:${seg}`)
+divSeg.setAttribute("value",`${seg}`)
 divMin.setAttribute("value",`${min}`)
-divMili.setAttribute("value",`:${mili}`)
+divMili.setAttribute("value",`${mili}`)
 
 
 
@@ -378,13 +391,17 @@ function cambiarDisplayACronometro() {
         seg=0
         min++
     }
+
+    divMili.value = `${mili}`
+    divSeg.value = `${seg}`
+    divMin.value = `${min}`
     /* divMin.innerText= "0"+min
     divSeg.innerText= ":"+seg*/
-    divSeg.innerHTML= `: ${seg}`
+    //divSeg.innerHTML= `: ${seg}`
     //divMili.setAttribute("value",`:${mili}`) 
-    divSeg.setAttribute("value",`:${seg}`)
+    /* divSeg.setAttribute("value",`:${seg}`)
     divMin.setAttribute("value",`${min}`)
-    divMili.setAttribute("value",`:${mili}`)
+    divMili.setAttribute("value",`:${mili}`) */
     /* enDisplay.innerHTML=`
     <input class="input" value="${min}" id="divMin"></input>
     <input class="input" value=":${seg}" id="divSeg"></input>
