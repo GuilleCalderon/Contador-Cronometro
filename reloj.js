@@ -12,6 +12,7 @@ let checkCronometro = document.getElementById("checkCronometro")
 let estadoInicial = 0
 let sucesoActivo = false
 let forReset
+let forResetTempoEnCrono
 let forResetTempo
 let marcarVuelta
 let vueltas = []
@@ -100,11 +101,11 @@ cronometro.addEventListener("click",()=>{
             contadorTemporizador++
             deshabilitarTempo()
             temporizadorBtn.classList.add("btn-desactivado")
-            console.log(contadorTemporizador,contadorCronometro)
+            //console.log(contadorTemporizador,contadorCronometro)
 
         }
         cronometro.value= "Detener Cronometro"
-        console.log(checkCronometro.checked)
+        
         let marcarVueltaBtn=document.getElementById("input-btn")
         
         marcarVueltaBtn.innerHTML=
@@ -116,7 +117,7 @@ cronometro.addEventListener("click",()=>{
             
             
             vueltas.push(estadoInicial-1)
-            console.log(vueltas)
+            //console.log(vueltas)
 
             vueltas.forEach((vuelta,i)=>{
 
@@ -155,7 +156,7 @@ cronometro.addEventListener("click",()=>{
             })       
             
         })
-        console.log(contadorTemporizador,contadorCronometro)
+        //console.log(contadorTemporizador,contadorCronometro)
     }else {
         if(checkCronometro.checked){
             contadorTemporizador--
@@ -197,43 +198,85 @@ temporizadorBtn.addEventListener("click",()=>{
          clearInterval(intermitencia)
          enDisplay.classList.remove("rojo")
          
-        }
-    if((sucesoActivo === false) && (estadoInicial>0)){
-        
-        if(contadorCronometro===1){
-            contadorCronometro--
-            deshabilitarCrono()
-            
-        } 
-        if(contadorCronometro===0){
-            contadorCronometro++
-            deshabilitarCrono()
-            cronometro.classList.toggle("btn-desactivado")
-        }  
-        sucesoActivo=true
-        temporizadorBtn.value= "Detener Temporizador"
-        forResetTempo = setInterval(temporizadorIniciar,1000)
-        console.log(contadorTemporizador,contadorCronometro)
-        
-    }else {
-        if(contadorCronometro===-1){
-            contadorCronometro=0
-            deshabilitarCrono()
-        }
-        if(contadorCronometro===1){
-            cronometro.classList.toggle("btn-desactivado")
-            contadorCronometro--
-            deshabilitarCrono()
-        }
-        
-        sucesoActivo=false
-        //contadorCronometro--    
-        //deshabilitarCrono()
-        temporizadorBtn.value= "Iniciar Temporizador"
-        
-        detenerTemporizador()
-        console.log(contadorTemporizador,contadorCronometro)
     }
+    if(checkContador.checked){
+
+        if((sucesoActivo === false) && (estadoInicial>0)){
+            
+            if(contadorCronometro===1){
+                contadorCronometro--
+                deshabilitarCrono()
+                
+            } 
+            if(contadorCronometro===0){
+                contadorCronometro++
+                deshabilitarCrono()
+                cronometro.classList.toggle("btn-desactivado")
+            }  
+            sucesoActivo=true
+            temporizadorBtn.value= "Detener Temporizador"
+            forResetTempo = setInterval(temporizadorIniciar,1000)
+            console.log(contadorTemporizador,contadorCronometro)
+            
+        }else {
+            if(contadorCronometro===-1){
+                contadorCronometro=0
+                deshabilitarCrono()
+            }
+            if(contadorCronometro===1){
+                cronometro.classList.toggle("btn-desactivado")
+                contadorCronometro--
+                deshabilitarCrono()
+            }
+            
+            sucesoActivo=false
+            //contadorCronometro--    
+            //deshabilitarCrono()
+            temporizadorBtn.value= "Iniciar Temporizador"
+            
+            detenerTemporizador()
+            //console.log(contadorTemporizador,contadorCronometro)
+        }
+    }
+    if(checkCronometro.checked){
+        if((sucesoActivo === false) && (seg>0)){
+            
+            if(contadorCronometro===1){
+                contadorCronometro--
+                deshabilitarCrono()
+                
+            } 
+            if(contadorCronometro===0){
+                contadorCronometro++
+                deshabilitarCrono()
+                cronometro.classList.toggle("btn-desactivado")
+            }  
+            sucesoActivo=true
+            temporizadorBtn.value= "Detener Temporizador"
+            forResetTempoEnCrono = setInterval(tempoEnCronometro,10)
+            //console.log(contadorTemporizador,contadorCronometro)
+            
+        }else {
+            if(contadorCronometro===-1){
+                contadorCronometro=0
+                deshabilitarCrono()
+            }
+            if(contadorCronometro===1){
+                cronometro.classList.toggle("btn-desactivado")
+                contadorCronometro--
+                deshabilitarCrono()
+            }
+            
+            sucesoActivo=false
+            //contadorCronometro--    
+            //deshabilitarCrono()
+            temporizadorBtn.value= "Iniciar Temporizador"
+            
+            clearInterval(forResetTempoEnCrono)
+            //console.log(contadorTemporizador,contadorCronometro)
+        }
+    }
+
     
 
 })
@@ -360,9 +403,6 @@ divMili.setAttribute("value",`${mili}`)
 
 divMin.addEventListener("change",(evento)=>{
     min = evento.target.value
-    
-
-   //divMin.setAttribute("value",`${min}`)
    
   
 
@@ -371,10 +411,8 @@ divMin.addEventListener("change",(evento)=>{
 divSeg.addEventListener("change",(evento)=>{
    
     seg = evento.target.value
-   //divSeg.setAttribute("value",`:${seg}`)
-   
 
-   console.log(seg)    
+      
 
 })
 
@@ -395,30 +433,71 @@ function cambiarDisplayACronometro() {
     divMili.value = `${mili}`
     divSeg.value = `${seg}`
     divMin.value = `${min}`
-    /* divMin.innerText= "0"+min
-    divSeg.innerText= ":"+seg*/
-    //divSeg.innerHTML= `: ${seg}`
-    //divMili.setAttribute("value",`:${mili}`) 
-    /* divSeg.setAttribute("value",`:${seg}`)
-    divMin.setAttribute("value",`${min}`)
-    divMili.setAttribute("value",`:${mili}`) */
-    /* enDisplay.innerHTML=`
-    <input class="input" value="${min}" id="divMin"></input>
-    <input class="input" value=":${seg}" id="divSeg"></input>
-    <input class="input" value=":${mili}" id="divMil"></input>` */
     
-        //divMin.setAttribute("value",`${min}`)
-        //divSeg.setAttribute("value",`:${seg}`)
-        //divSeg.innerHTML=`<input value="" class="indicador" id="divMin">${seg}</input>`
+}
+
+function tempoEnCronometro (){
+    if (min >=0 ){
         
+        deshabilitarTempo()
+        //enDisplay.innerHTML= `<div class="indicador">${estadoInicial-1}</div>`
+        mili--
+        if(mili < 0){
+            mili=99
+            seg--
+        }
+        if(seg<0){
+            seg=59
+            min--
+        }
+    
+        divMili.value = `${mili}`
+        divSeg.value = `${seg}`
+        divMin.value = `${min}`
         
-        /* enDisplay.innerHTML = `<div class="indicador">
-        <div contenteditable=true>0${min}</div>
-        <div contenteditable=true>:${seg}</div>
-        <div contenteditable=true>:${mili}</div>
-        </div>` */
+    }else{
         
+        if(min=-1){
+            min=0
+            mili=0
+            seg=0
+
+            divMili.value = `${mili}`
+            divSeg.value = `${seg}`
+            divMin.value = `${min}`
+        }
         
+        clearInterval(forResetTempoEnCrono)
+        contadorCronometro--
+        deshabilitarCrono()
+        
+        temporizadorBtn.value ="Temporizador OK"
+
+
+        intermitencia= setInterval(()=>{
+
+            enDisplay.classList.toggle("rojo")
+
+        },700)    
+        
+       
+            contadorTemporizador=0
+            contadorCronometro=0
+            deshabilitarCrono()
+            deshabilitarTempo()
+            cronometro.classList.remove("btn-desactivado")
+            
+        
+
+    }
+
+
+
+
+    //mili--
+    
+    
+
 }
 
 
