@@ -16,6 +16,7 @@ let forResetTempoEnCrono
 let forResetTempo
 let marcarVuelta
 let vueltas = []
+let vueltasCrono=[]
 let contadorCronometro = 0
 let contadorTemporizador = 0
 let btnCerrar
@@ -24,7 +25,25 @@ let cronometroFuncionando
 let mili=0
 let seg=0    
 let min=0
+
+class TiempoEnCrono {
+    constructor(minutos,segundos,milisegundos){
+        this.minutos = minutos,
+        this.segundos= segundos,
+        this.milisegundos=milisegundos
+    }
+}
 //Eventos
+function refrescar (){
+
+    if (checkContador.checked){
+        location.reload()
+    }
+    if(checkCronometro.checked){
+        location.reload()
+    }
+}
+
 
 sumarEnDisplay.addEventListener("click",()=>{
     let value = sumarContador()
@@ -65,7 +84,7 @@ restarEnDisplay.addEventListener("click",()=>{
 })
 
 resetDisplay.addEventListener("click",()=>{
-    
+    location.reload()
     let value = resetearContador()
     
     enDisplay.innerHTML = `<div class="indicador">${value}</div>`
@@ -115,45 +134,92 @@ cronometro.addEventListener("click",()=>{
         
         marcarVuelta.addEventListener("click",()=>{
             
-            
-            vueltas.push(estadoInicial-1)
-            //console.log(vueltas)
+            if(checkContador.checked){
 
-            vueltas.forEach((vuelta,i)=>{
-
-                let diferencia
-
-                if(i===0){
-                    diferencia = vueltas[i]
-                }else{
-                    diferencia = vueltas[i]-vueltas[i-1]
-
-                }
-                
-                if(i===vueltas.length-1){
+                vueltas.push(estadoInicial-1)
+                //console.log(vueltas)
+    
+                vueltas.forEach((vuelta,i)=>{
+    
+                    let diferencia
+    
+                    if(i===0){
+                        diferencia = vueltas[i]
+                    }else{
+                        diferencia = vueltas[i]-vueltas[i-1]
+    
+                    }
                     
-                   const listElement = document.createElement("li")
-                   listElement.setAttribute("id",`tiempo_${i}`)
-                   listElement.innerHTML = `<div contenteditable=true>Ingrese titulo de la vuelta</div>Su tiempo es: ${vuelta} segundos // La diferencia entre tiempos es: ${diferencia} segundos`
-                   const btnCerrar =document.createElement("input")
-                   btnCerrar.setAttribute("type","button")
-                   btnCerrar.setAttribute("class","btn-todos")
-                   btnCerrar.setAttribute("id",`cerrar_${i}`)
-                   btnCerrar.setAttribute("value","x")
-
-                   listElement.appendChild(btnCerrar)
-
-                   listaTiempo.appendChild(listElement)
-
-                   btnCerrar.addEventListener("click",()=>{
-                       listElement.remove()
-                   })
-                }
+                    if(i===vueltas.length-1){
+                        
+                       const listElement = document.createElement("li")
+                       listElement.setAttribute("id",`tiempo_${i}`)
+                       listElement.innerHTML = `<div contenteditable=true>Ingrese titulo de la vuelta</div>Su tiempo es: ${vuelta} segundos // La diferencia entre tiempos es: ${diferencia} segundos`
+                       const btnCerrar =document.createElement("input")
+                       btnCerrar.setAttribute("type","button")
+                       btnCerrar.setAttribute("class","btn-todos")
+                       btnCerrar.setAttribute("id",`cerrar_${i}`)
+                       btnCerrar.setAttribute("value","x")
+    
+                       listElement.appendChild(btnCerrar)
+    
+                       listaTiempo.appendChild(listElement)
+    
+                       btnCerrar.addEventListener("click",()=>{
+                           listElement.remove()
+                       })
+                    }
+                    
+                    
                 
+                    
+                })       
+            }
+            if(checkCronometro.checked){
+
+                vueltasCrono.push(new TiempoEnCrono(min,seg,mili))
+                //console.log(vueltas)
+    
+                vueltasCrono.forEach((vuelta,i)=>{
+    
+                    let diferenciaMin
+                    let diferenciaSeg
+                    let diferenciaMili
+    
+                    if(i===0){
+                        diferenciaMin = vueltasCrono[i].minutos
+                        diferenciaSeg = vueltasCrono[i].segundos
+                        diferenciaMili = vueltasCrono[i].milisegundos
+                    }else{
+                        diferenciaMin = vueltasCrono[i].minutos-vueltasCrono[i-1].minutos
+                        diferenciaSeg = vueltasCrono[i].segundos-vueltasCrono[i-1].segundos
+                        diferenciaMili = vueltasCrono[i].milisegundos-vueltasCrono[i-1].milisegundos
+                            
+                    }
+                    
+                    if(i===vueltasCrono.length-1){
+                        
+                       const listElement = document.createElement("li")
+                       listElement.setAttribute("id",`tiempo_${i}`)
+                       listElement.innerHTML = `<div contenteditable=true>Ingrese titulo de la vuelta</div>Su tiempo es:<strong> ${min} : ${seg} : ${mili}</strong> // La diferencia entre tiempos es:<strong> ${diferenciaMin} : ${diferenciaSeg} : ${diferenciaMili}</strong>.`
+                       const btnCerrar =document.createElement("input")
+                       btnCerrar.setAttribute("type","button")
+                       btnCerrar.setAttribute("class","btn-todos")
+                       btnCerrar.setAttribute("id",`cerrar_${i}`)
+                       btnCerrar.setAttribute("value","x")
+    
+                       listElement.appendChild(btnCerrar)
+    
+                       listaTiempo.appendChild(listElement)
+    
+                       btnCerrar.addEventListener("click",()=>{
+                           listElement.remove()
+                       })
+                    }   
                 
-            
-                
-            })       
+                    
+                })
+            }
             
         })
         //console.log(contadorTemporizador,contadorCronometro)
